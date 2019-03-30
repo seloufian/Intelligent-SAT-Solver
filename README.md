@@ -1,4 +1,4 @@
-﻿# Intelligent SAT Solver
+# Intelligent SAT Solver
 > An implementation of different approaches to solve the satisfiability problem (SAT) using blind, heuristic and metaheuristic methods.
 
 ## General info
@@ -13,20 +13,20 @@ project started in **February 2019** (in progress) as a university practical wor
 ## Project content
 ```text
 .
-├── examples										<- Contains test files for the SAT solver
+├── examples							<- Contains test files for the SAT solver
 │	├── uf20-01.cnf / uf50-01.cnf / uf75-01.cnf		<- Benchmark files (SAT instances)
 │	└── dataSearchMethod.png / resultsStats.png		<- Images used as illustration
 │
-├── src							<- Contains Java source-code of the project
-│	├── main					<- Contains general classes used in other packages (with "main()" method)
-│	├── gui						<- Contains the GUI (the frame and its components)
-│	├── blindSearch				<- Contains the implementation of DFS and BFS searches
-│	├── heuristicSearch			<- Contains the implementation of different heuristic algorithms
-│	├── bso						<- Contains the implementation of BSO metaheuristic search method
-│	├── pso						<- Contains the implementation of PSO metaheuristic search method
+├── src					<- Contains Java source-code of the project
+│	├── main			<- Contains general classes used in other packages (with "main()" method)
+│	├── gui				<- Contains the GUI (the frame and its components)
+│	├── blindSearch			<- Contains the implementation of DFS and BFS searches
+│	├── heuristicSearch		<- Contains the implementation of different heuristic algorithms
+│	├── bso				<- Contains the implementation of BSO metaheuristic search method
+│	├── pso				<- Contains the implementation of PSO metaheuristic search method
 │	└── JFreeChart-1.5.0.jar	<- External library used to generate statistical graphs
 │
-└── README.md					<- Current project information
+└── README.md				<- Current project information
 ```
 
 ## Technologies
@@ -37,12 +37,16 @@ To run this project, make sure that you have at least ***JDK 8*** already instal
 ```bash
 # Create a destination directory for the compiled ".java" files
 $ mkdir bin
+
 # Go to the "source-code" directory
 $ cd src
+
 # Compile all ".java" files with the external Jar "JFreeChart" (For Windows, replace ':' with ';')
 $ javac -d "../bin" -cp ".:JFreeChart-1.5.0.jar" blindSearch/*.java bso/*.java gui/*.java heuristicSearch/*.java main/*.java pso/*.java
+
 # Go back to the root directory
 $ cd ..
+
 # Execute the main class (Application) with the external JAR "JFreeChart" (For Windows, replace ':' with ';')
 $ java -cp "bin:src/JFreeChart-1.5.0.jar" main/Application
 ```
