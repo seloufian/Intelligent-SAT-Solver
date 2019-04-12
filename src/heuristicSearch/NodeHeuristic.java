@@ -24,7 +24,7 @@ public class NodeHeuristic implements Comparable<NodeHeuristic> {
 	public int compareTo(NodeHeuristic anotherNode) {
 		if((this.functionG + this.functionH) > (anotherNode.functionG + anotherNode.functionH))
 			return 1;
-		
+
 		if((this.functionG + this.functionH) < (anotherNode.functionG + anotherNode.functionH))
 			return -1;
 

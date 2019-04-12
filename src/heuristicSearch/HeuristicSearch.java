@@ -8,9 +8,17 @@ import main.Solution;
 public abstract class HeuristicSearch {
 
 	public static Solution heuristicSearch(ClausesSet clset, long execTimeMillis) {
+		int clsetSat = clset.getNumberClause(); /* Number of clauses of "clset", to optimize execution time (memory access) */
+
 		ArrayList<NodeHeuristic> open = new ArrayList<NodeHeuristic>();
+
 		Solution currentSol = new Solution(clset.getNumberVariables());
-		NodeHeuristic currentNode = new NodeHeuristic(currentSol, currentSol.satisfiedClauses(clset), 0);
+		int currentSolSat = currentSol.satisfiedClauses(clset); /* Number of satisfied clauses by current solution, to optimize execution time */
+
+		NodeHeuristic currentNode = new NodeHeuristic(currentSol, 0, clsetSat-currentSolSat);
+
+		Solution bestSolution = new Solution(currentSol);
+		int bestSolutionSat = currentSolSat; /* Number of satisfied clauses by the best solution */
 
 		int randomLiteral;
 
@@ -20,11 +28,11 @@ public abstract class HeuristicSearch {
 			if((System.currentTimeMillis() - startTime) >= execTimeMillis)
 				break; /* If the search time has reached (or exceeded) the allowed run time, finish the search */
 
-			Collections.sort(open); /* Sort the nodes using the evaluation function (f = g + h) */
-			
+			Collections.sort(open); /* Sort in ascending order the nodes using the evaluation function (f = g + h) */
+
 			if(! open.isEmpty()) {
 				currentNode = open.remove(0); /* Remove the first element in the "open" list */
-				currentSol = currentNode.getSolution();
+				currentSol = new Solution(currentNode.getSolution());
 			}
 
 			if(currentSol.getActiveLiterals() == clset.getNumberVariables())
@@ -32,18 +40,21 @@ public abstract class HeuristicSearch {
 
 			randomLiteral = currentSol.randomLiteral(clset.getNumberVariables());
 
-			currentSol.changeLiteral(Math.abs(randomLiteral)-1, randomLiteral); /* Add generated literal to actual solution */
-			if(currentSol.isSolution(clset)) /* If this solution satisfies all clauses in "clset", exit the loop */
-				break;
-			open.add(new NodeHeuristic(new Solution(currentSol), currentSol.satisfiedClauses(clset), 0));
+			for(int i=0; i<2; i++) { /* Loop TWO times for the chosen literal (left child) and its negation (right child) */
+				currentSol.changeLiteral(Math.abs(randomLiteral)-1, i==0 ? randomLiteral : -randomLiteral);
+				currentSolSat = currentSol.satisfiedClauses(clset);
 
-			currentSol.changeLiteral(Math.abs(randomLiteral)-1, -randomLiteral); /* Add the NEGATION of generated literal to actual solution */
-			if(currentSol.isSolution(clset)) /* If this solution satisfies all clauses in "clset", exit the loop */
-				break;
-			open.add(new NodeHeuristic(new Solution(currentSol), currentSol.satisfiedClauses(clset), 0));
+				if(currentSolSat > bestSolutionSat) /* If current solution is better, update the best solution */
+					bestSolution = new Solution(currentSol);
+
+				if(currentSolSat == clsetSat) /* If this solution satisfies all clauses in "clset", return it */
+					return bestSolution;
+
+				open.add(new NodeHeuristic(new Solution(currentSol), currentNode.getSolution().sameSatisfiedClausesAsLiteral(clset,
+						i==0 ? randomLiteral : -randomLiteral), clsetSat-currentSolSat));
+			}
 		}while(! open.isEmpty());
 
-		return currentNode.getSolution();
+		return bestSolution;
 	}
-
 }

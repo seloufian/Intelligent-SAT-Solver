@@ -1,4 +1,5 @@
 package gui;
+
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -21,6 +22,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import blindSearch.BlindSearch;
 import bso.BSO;
+import heuristicSearch.HeuristicSearch;
 import main.ClausesSet;
 import pso.PSO;
 
@@ -79,12 +81,12 @@ public class Frame extends JFrame {
 		optionsPanel.setLayout(new CardLayout(0, 0));
 
 		JPanel defaultOption = new JPanel();
-		HeuristicPanel heuristicOption = new HeuristicPanel();
+		// HeuristicPanel heuristicOption = new HeuristicPanel(); /* "heuristicOptions" was disabled until other heuristics will be added */
 		BSOPanel bsoOption = new BSOPanel();
 		PSOPanel psoOption = new PSOPanel();
 
 		optionsPanel.add(defaultOption, "default");
-		optionsPanel.add(heuristicOption, "heuristic");
+		// optionsPanel.add(heuristicOption, "heuristic"); /* "heuristicOptions" was disabled until other heuristics will be added */
 		optionsPanel.add(bsoOption, "bso");
 		optionsPanel.add(psoOption, "pso");
 
@@ -119,9 +121,9 @@ public class Frame extends JFrame {
 				CardLayout cardLayout = (CardLayout) optionsPanel.getLayout();
 
 				switch(resMethodComboBox.getSelectedIndex()) {
-					case 2:
-						cardLayout.show(optionsPanel, "heuristic");
-						break;
+					// case 2:
+						// cardLayout.show(optionsPanel, "heuristic"); /* "heuristicOptions" was disabled until other heuristics will be added */
+						// break;
 					case 3:
 						cardLayout.show(optionsPanel, "bso");
 						break;
@@ -158,7 +160,7 @@ public class Frame extends JFrame {
 				long timeAttempt = Long.parseLong(timeAttemptSpinner.getValue().toString())*1000;
 				ClausesSet clset = clausesPanel.getClausesSet();
 				String methodName = "";
-				
+
 				resultPanel.setUpperBound(clset.getNumberClause());
 
 				switch(resMethodComboBox.getSelectedIndex()) {
@@ -187,7 +189,17 @@ public class Frame extends JFrame {
 						break;
 
 					case 2:
-						informationLabel.setText("SAT instance resolved using \"Heuristic "+heuristicOption.getSelectedHeuristicRadio()+"\"");
+						/* "heuristicOptions" was disabled until other heuristics will be added */
+						// informationLabel.setText("SAT instance resolved using \"Heuristic "+heuristicOption.getSelectedHeuristicRadio()+"\"");
+						informationLabel.setText("SAT instance resolved using \"Heuristic search (A*)\"");
+						methodName = "A*";
+
+						for(int i=0; i< Integer.parseInt(numAttemptsSpinner.getValue().toString()); i++) {
+							startResolution = System.currentTimeMillis();
+							resultPanel.addData(clset, HeuristicSearch.heuristicSearch(clset, timeAttempt),
+									System.currentTimeMillis() - startResolution > timeAttempt ? timeAttempt : System.currentTimeMillis() - startResolution, i+1);
+						}
+
 						break;
 
 					case 3:

@@ -1,4 +1,5 @@
 package main;
+
 import java.util.ArrayList;
 
 public class Solution {
@@ -131,6 +132,29 @@ public class Solution {
 
 	public boolean isSolution(ClausesSet clausesSet) { /* Check if this solution satisfies ALL CLAUSES in "clauses set" */
 		return clausesSet.getNumberClause() == this.satisfiedClauses(clausesSet);
+	}
+
+
+	public int sameSatisfiedClausesAsLiteral(ClausesSet clausesSet, int literal) { /* Count number of satisfied clauses by "literal" already satisfied by this solution */
+		int countSat = 0;
+		int tempLiteral;
+		boolean solutionSatClause, literalSatClause;
+
+		for(int i=0; i<clausesSet.getNumberClause(); i++) { /* Browse all clauses of "clausesSet" */
+			solutionSatClause = false;		literalSatClause = false;
+
+			for(int j=0; j<clausesSet.getClauseSize(); j++) { /* Browse all literals of current clause */
+				tempLiteral = clausesSet.getClause(i).getLiteral(j);
+				if(literal == tempLiteral)
+					literalSatClause = true; /* The literal satisfies the current clause (number "i") */
+				if(this.getLiteral(Math.abs(tempLiteral)-1) == tempLiteral)
+					solutionSatClause = true; /* This solution satisfies the current clause (number "i") */
+			}
+			if(solutionSatClause && literalSatClause)
+				countSat++; /* If "literal" and the solution satisfies the clause "i", increment the counter "countSat" */
+		}
+
+		return countSat;
 	}
 
 
