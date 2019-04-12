@@ -1,6 +1,9 @@
 package gui;
+
 import java.awt.Color;
 import java.awt.Dimension;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
@@ -23,7 +26,7 @@ public class ResultPanel extends JPanel{
 	private static final long serialVersionUID = 1L;
 
 
-	public class Result{
+	public class Result{ /* Internal class */
 		private Solution solution;
 		private float satisfiability;
 		private long time;
@@ -31,7 +34,7 @@ public class ResultPanel extends JPanel{
 
 		public Result(ClausesSet clset, Solution solution, long time) {
 			this.solution = solution;
-			this.satisfiability = (float) (Math.round(100 * (float)solution.satisfiedClauses(clset) / (float)clset.getNumberClause()) / 100.0);
+			this.satisfiability = (float)solution.satisfiedClauses(clset)/clset.getNumberClause();
 			this.time = time;
 		}
 
@@ -76,8 +79,8 @@ public class ResultPanel extends JPanel{
 
 		setBackground(Color.decode("#D6D9DF"));
 	}
-	
-	
+
+
 	public void setUpperBound(int upperBound) {
 		barChart.getCategoryPlot().getRangeAxis().setUpperBound(upperBound);
 	}
@@ -87,7 +90,7 @@ public class ResultPanel extends JPanel{
 		Result result = new Result(clset, solution, time);
 
 		resultData.add(result);
-		this.dataset.setValue(solution.satisfiedClauses(clset), "SAT", "Attempt "+numAttempt+"\n("+Math.round(100*time/1000.0)/100.0+"  sec)");
+		this.dataset.setValue(solution.satisfiedClauses(clset), "SAT", "Attempt "+numAttempt+"\n("+round(time/1000.0, 2)+"  sec)");
 	}
 
 
@@ -97,29 +100,39 @@ public class ResultPanel extends JPanel{
 	}
 
 
-	public float getSatisfiabilityRate() {
+	public double getSatisfiabilityRate() {
 		float sumSatisfiedClausesPerAttempt = 0;
 
 		for(int i=0; i<resultData.size(); i++)
 			sumSatisfiedClausesPerAttempt += resultData.get(i).getSatisfiability();
 
-		return (float) (Math.round(1000000 * sumSatisfiedClausesPerAttempt / resultData.size()) / 10000.0);
+		return round(100*sumSatisfiedClausesPerAttempt/resultData.size(), 7);
 	}
 
 
-	public float getAverageSearchTime() {
+	public double getAverageSearchTime() {
 		long sumSearchTimePerAttempt = 0;
 
 		for(int i=0; i<resultData.size(); i++)
 			sumSearchTimePerAttempt += resultData.get(i).getTime();
 
-		return (float) (Math.round(1000 * sumSearchTimePerAttempt / resultData.size()) / 1000.0);
+		return round(sumSearchTimePerAttempt/resultData.size(), 9);
 	}
 
 
 	public void makeTitle(String searchMethodName) {
 		if(! resultData.isEmpty())
 			this.barChart.setTitle("Satisfied clauses per attempt (using \""+searchMethodName+"\")\nSatisfiability rate :  "+getSatisfiabilityRate()+" %  ("
-									+Math.round(1000*getAverageSearchTime()/1000.0)/1000.0+"  sec)");
+									+getAverageSearchTime()/1000+"  sec)");
+	}
+
+
+	private double round(double value, int places) {
+		if (places < 0)
+			throw new IllegalArgumentException();
+
+		BigDecimal bd = new BigDecimal(Double.toString(value));
+		bd = bd.setScale(places, RoundingMode.HALF_UP);
+		return bd.doubleValue();
 	}
 }
