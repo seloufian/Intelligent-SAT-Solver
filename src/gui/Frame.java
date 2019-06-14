@@ -22,6 +22,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import blindSearch.BlindSearch;
 import bso.BSO;
+import ga.GA;
 import heuristicSearch.HeuristicSearch;
 import main.ClausesSet;
 import pso.PSO;
@@ -71,7 +72,7 @@ public class Frame extends JFrame {
 		dataPanel.add(selectMethodLabel);
 
 		JComboBox<String> resMethodComboBox = new JComboBox<String>();
-		resMethodComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Depth-First Search (DFS)", "Breadth-First Search (BFS)", "Heuristic Search (A*)", "Bee Swarm Optimization (BSO)", "Particle Swarm Optimization (PSO)"}));
+		resMethodComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Depth-First Search (DFS)", "Breadth-First Search (BFS)", "Heuristic Search (A*)", "Genetic Algorithm (GA)", "Bee Swarm Optimization (BSO)", "Particle Swarm Optimization (PSO)"}));
 		resMethodComboBox.setBounds(370, 38, 237, 25);
 		dataPanel.add(resMethodComboBox);
 
@@ -82,11 +83,13 @@ public class Frame extends JFrame {
 
 		JPanel defaultOption = new JPanel();
 		// HeuristicPanel heuristicOption = new HeuristicPanel(); /* "heuristicOptions" was disabled until other heuristics will be added */
+		GAPanel gaOption = new GAPanel();
 		BSOPanel bsoOption = new BSOPanel();
 		PSOPanel psoOption = new PSOPanel();
 
 		optionsPanel.add(defaultOption, "default");
 		// optionsPanel.add(heuristicOption, "heuristic"); /* "heuristicOptions" was disabled until other heuristics will be added */
+		optionsPanel.add(gaOption, "ga");
 		optionsPanel.add(bsoOption, "bso");
 		optionsPanel.add(psoOption, "pso");
 
@@ -125,9 +128,12 @@ public class Frame extends JFrame {
 						// cardLayout.show(optionsPanel, "heuristic"); /* "heuristicOptions" was disabled until other heuristics will be added */
 						// break;
 					case 3:
-						cardLayout.show(optionsPanel, "bso");
+						cardLayout.show(optionsPanel, "ga");
 						break;
 					case 4:
+						cardLayout.show(optionsPanel, "bso");
+						break;
+					case 5:
 						cardLayout.show(optionsPanel, "pso");
 						break;
 					default:
@@ -203,6 +209,20 @@ public class Frame extends JFrame {
 						break;
 
 					case 3:
+						informationLabel.setText("SAT instance resolved using \"Genetic Algorithm (GA)\"");
+						methodName = "GA";
+
+						for(int i=0; i< Integer.parseInt(numAttemptsSpinner.getValue().toString()); i++) {
+							startResolution = System.currentTimeMillis();
+							resultPanel.addData(clset, GA.searchGA(clset,
+												gaOption.getPopulationSize(), gaOption.getCrossoverRate(), gaOption.getMutationRate(),
+												gaOption.getnumIterGa(), timeAttempt),
+												System.currentTimeMillis() - startResolution > timeAttempt ? timeAttempt : System.currentTimeMillis() - startResolution, i+1);
+						}
+
+						break;
+
+					case 4:
 						informationLabel.setText("SAT instance resolved using \"Bee Swarm Optimization (BSO)\"");
 						methodName = "BSO";
 
@@ -216,7 +236,7 @@ public class Frame extends JFrame {
 
 						break;
 
-					case 4:
+					case 5:
 						informationLabel.setText("SAT instance resolved using \"Particle Swarm Optimization (PSO)\"");
 						methodName = "PSO";
 
