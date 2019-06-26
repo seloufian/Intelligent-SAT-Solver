@@ -242,7 +242,7 @@ public class Frame extends JFrame {
 
 						for(int i=0; i< Integer.parseInt(numAttemptsSpinner.getValue().toString()); i++) {
 							startResolution = System.currentTimeMillis();
-							resultPanel.addData(clset, PSO.searchPSO(clset, psoOption.getNumParticles(), psoOption.getMaxVelocity(), psoOption.getConstant1(),
+							resultPanel.addData(clset, PSO.searchPSO(clset, psoOption.getNumParticles(), psoOption.getConstant1(),
 												psoOption.getConstant2(), psoOption.getInWeight(), psoOption.getNumIterPso(), timeAttempt),
 												System.currentTimeMillis() - startResolution > timeAttempt ? timeAttempt : System.currentTimeMillis() - startResolution, i+1);
 						}

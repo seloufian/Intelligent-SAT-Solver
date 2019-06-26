@@ -1,4 +1,5 @@
 package pso;
+import java.util.ArrayList;
 import java.util.Random;
 import main.ClausesSet;
 import main.Solution;
@@ -8,13 +9,13 @@ public class Particle {
 	private int velocity;
 
 
-	public Particle(int solutionSize, int maxVelocity) {
+	public Particle(int solutionSize) {
 		solution = new Solution(solutionSize);
 		solution.randomSolution();
 		this.pBest = solution;
 
 		Random random = new Random();
-		velocity = random.nextInt(maxVelocity);
+		velocity = random.nextInt(solutionSize);
 	}
 
 
@@ -23,20 +24,25 @@ public class Particle {
 	public int getVelocity() { return velocity; }
 
 
-	public void updateVelocity(Solution gBest, int inWeight, int const1, int const2, int maxVelocity) {
+	public void updateVelocity(Solution gBest, int inWeight, int const1, int const2) {
 		double internalMove = inWeight * velocity;
 		double cognitiveMove = const1 * Math.random() * pBest.difference(this.solution);
 		double socialMove = const2 * Math.random() * gBest.difference(this.solution);
-		
-		velocity = ((int) (internalMove + cognitiveMove + socialMove))%maxVelocity;
+
+		/* Use "modulo" so that "velocity" will not increment indefinitely */
+		velocity = ((int) (internalMove + cognitiveMove + socialMove))%this.solution.getSolutionSize();
 	}
 
 
 	public void updatePosition() {
+		ArrayList<Integer> avaibleLiterals = new ArrayList<Integer>(); /* List of literals that can be reversed */
 		Random random = new Random();
-		
-		for(int i=0; i<velocity; i++)
-			this.solution.invertLiteral(random.nextInt(solution.getSolutionSize()));
+
+		for(int i=0; i<this.solution.getSolutionSize(); i++) /* Initialize the list (all literals can be reversed) */
+			avaibleLiterals.add(i);
+
+		for(int i=0; i<velocity; i++) /* Reverse literals (chosen randomly) and delete them from "avaibleLiterals" (to not choose them again) */
+			this.solution.invertLiteral(avaibleLiterals.remove(random.nextInt(avaibleLiterals.size())));
 	}
 
 
