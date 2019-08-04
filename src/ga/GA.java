@@ -13,6 +13,7 @@ public class GA {
 		int[] choosedInd = new int[2]; /* The two individuals chosen for crossover process */
 		Individual[] resCrInd = new Individual[2]; /* Results of crossing between two individuals */
 		Random random = new Random(); /* Random Object (for different random values) */
+		float mr;
 
 		long startTime = System.currentTimeMillis(); /* Save the start time of the search */
 
@@ -38,13 +39,27 @@ public class GA {
 				choosedInd[1] = random.nextInt(populationSize);
 			}while(choosedInd[0] == choosedInd[1]); /* We must choose two DIFFERENT individuals (The same ones have no effect in crossover process) */
 
-			if(random.nextInt(101) < crossoverRate) { /* If "Rc" allows the crossover process (value "101" used to take the interval [0;100])*/
+			if(random.nextFloat() * 100 < crossoverRate) { /* If "Rc" allows the crossover process (value "101" used to take the interval [0;100])*/
 				resCrInd[0] = GA.crossover(clset, population.get(choosedInd[0]), population.get(choosedInd[1]), random.nextInt(clset.getNumberVariables()), true);
 				resCrInd[1] = GA.crossover(clset, population.get(choosedInd[0]), population.get(choosedInd[1]), random.nextInt(clset.getNumberVariables()), false);
 
-				if(random.nextInt(101) < mutationRate) { /* If "Rm" allows the mutation process (value "101" used to take the interval [0;100])*/
-					resCrInd[0].makeMutation(clset, random.nextInt(clset.getNumberVariables()));
-					resCrInd[1].makeMutation(clset, random.nextInt(clset.getNumberVariables()));
+				if((mr = random.nextFloat() * 100) < mutationRate) { /* If "Rm" allows the mutation process (value "101" used to take the interval [0;100])*/
+					ArrayList<Integer> availableLiterals = new ArrayList<Integer>();
+					for (int i = 0; i < clset.getNumberVariables(); i++) {
+						availableLiterals.add(i);
+					}
+					for (int i = 0; i < (mr*mutationRate/100)%clset.getNumberVariables(); i++) {
+						resCrInd[0].makeMutation(clset, availableLiterals.remove(random.nextInt(availableLiterals.size())));
+					}
+				}
+				if((mr = random.nextFloat()*100) < mutationRate) { /* If "Rm" allows the mutation process (value "101" used to take the interval [0;100])*/
+					ArrayList<Integer> availableLiterals = new ArrayList<Integer>();
+					for (int i = 0; i < clset.getNumberVariables(); i++) {
+						availableLiterals.add(i);
+					}
+					for (int i = 0; i < (mr*mutationRate/100)%clset.getNumberVariables(); i++) {
+						resCrInd[1].makeMutation(clset, availableLiterals.remove(random.nextInt(availableLiterals.size())));
+					}
 				}
 
 				for(int i=0; i<population.size(); i++) { /* Update current population with new individuals */
