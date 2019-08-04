@@ -23,7 +23,7 @@ public class PSOPanel extends JPanel{
 		numParticlesLabel.setBounds(15, 12, 136, 25);
 		add(numParticlesLabel);
 
-		numParticlesSpinner = new JSpinner(new SpinnerNumberModel(15, 1, 1000, 1));
+		numParticlesSpinner = new JSpinner(new SpinnerNumberModel(60, 1, 1000, 1));
 		numParticlesSpinner.setBounds(149, 13, 61, 23);
 		add(numParticlesSpinner);
 
@@ -31,7 +31,7 @@ public class PSOPanel extends JPanel{
 		constant1Label.setBounds(15, 49, 85, 25);
 		add(constant1Label);
 
-		constant1Spinner = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
+		constant1Spinner = new JSpinner(new SpinnerNumberModel(75, 1, 100, 1));
 		constant1Spinner.setBounds(98, 50, 61, 23);
 		add(constant1Spinner);
 
@@ -39,7 +39,7 @@ public class PSOPanel extends JPanel{
 		constant2Label.setBounds(15, 86, 85, 25);
 		add(constant2Label);
 
-		constant2Spinner = new JSpinner(new SpinnerNumberModel(2, 1, 100, 1));
+		constant2Spinner = new JSpinner(new SpinnerNumberModel(20, 1, 100, 1));
 		constant2Spinner.setBounds(97, 87, 61, 23);
 		add(constant2Spinner);
 
@@ -47,7 +47,7 @@ public class PSOPanel extends JPanel{
 		inWeightLabel.setBounds(15, 123, 94, 25);
 		add(inWeightLabel);
 
-		inWeightSpinner = new JSpinner(new SpinnerNumberModel(10, 1, 100, 1));
+		inWeightSpinner = new JSpinner(new SpinnerNumberModel(50, 1, 100, 1));
 		inWeightSpinner.setBounds(107, 124, 61, 23);
 		add(inWeightSpinner);
 
@@ -55,7 +55,7 @@ public class PSOPanel extends JPanel{
 		numIterPsoLabel.setBounds(15, 160, 140, 25);
 		add(numIterPsoLabel);
 
-		numIterPsoSpinner = new JSpinner(new SpinnerNumberModel(1000, 1, 1000000, 1));
+		numIterPsoSpinner = new JSpinner(new SpinnerNumberModel(3000, 1, 1000000, 1));
 		numIterPsoSpinner.setBounds(153, 161, 79, 23);
 		add(numIterPsoSpinner);
 	}

@@ -22,7 +22,7 @@ public class GAPanel extends JPanel {
 		populationSizeLabel.setBounds(15, 19, 109, 25);
 		add(populationSizeLabel);
 		
-		populationSizeSpinner = new JSpinner(new SpinnerNumberModel(15, 1, 100, 1));
+		populationSizeSpinner = new JSpinner(new SpinnerNumberModel(50, 1, 100, 1));
 		populationSizeSpinner.setBounds(123, 20, 61, 23);
 		add(populationSizeSpinner);
 
@@ -30,7 +30,7 @@ public class GAPanel extends JPanel {
 		crossoverRateLabel.setBounds(15, 63, 109, 25);
 		add(crossoverRateLabel);
 
-		crossoverRateSpinner = new JSpinner(new SpinnerNumberModel(70, 1, 100, 1));
+		crossoverRateSpinner = new JSpinner(new SpinnerNumberModel(100, 1, 100, 1));
 		crossoverRateSpinner.setBounds(123, 64, 61, 23);
 		add(crossoverRateSpinner);
 
@@ -42,7 +42,7 @@ public class GAPanel extends JPanel {
 		mutationRateLabel.setBounds(15, 107, 99, 25);
 		add(mutationRateLabel);
 		
-		mutationRateSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
+		mutationRateSpinner = new JSpinner(new SpinnerNumberModel(31, 1, 100, 1));
 		mutationRateSpinner.setBounds(113, 108, 61, 23);
 		add(mutationRateSpinner);
 		
@@ -54,7 +54,7 @@ public class GAPanel extends JPanel {
 		numIterGaLabel.setBounds(16, 151, 139, 25);
 		add(numIterGaLabel);
 
-		numIterGaSpinner = new JSpinner(new SpinnerNumberModel(1000, 1, 1000000, 1));
+		numIterGaSpinner = new JSpinner(new SpinnerNumberModel(3900, 1, 1000000, 1));
 		numIterGaSpinner.setBounds(154, 152, 84, 23);
 		add(numIterGaSpinner);
 	}
